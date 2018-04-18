@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "AmazingRace Simulator";
+    var signalRBaseUrl = System.Configuration.ConfigurationManager.AppSettings["signalRServiceBaseUrl"];
+    var webAPINotifyUrl = signalRBaseUrl + "/AmazingRace/PostTeamPosition";
+}
+<h1>@ViewBag.Title</h1>
+<br/>
+<p></p>
+<button id="btnAmazingRaceUpdateTeamPosition">Simulator! Send Team location to AmazingRace HUB -> Update Monitor Web Client </button>
+
+<text>Team Name:</text>
+<input type="text" id="teamName" value="T01" />
+<text>Position:</text>
+<input type="text" id="currentPosition" value="Pos01" />
+
+@section scripts{
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+    <script type="text/javascript">
+        function sendTeamPost() {
+            jQuery.support.cors = true;
+            var teamPos = {
+                eventId: 'E01',
+                teamId: 2,
+                x: 1.285839,
+                y: 103.824365,
+                ptStpPass: 1
+            }
+
+            $.ajax({
+                url: 'http://localhost:62916/AmazingRace/UpdateTeamPosition1',
+                type: 'GET',
+                data: JSON.stringify(teamPos),
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                }
+            });
+        }
+
+    $(document).ready(function () {
+        $('#btnAmazingRaceUpdateTeamPosition').click(function () {
+
+            $.ajax({
+                url: 'http://localhost:62916/AmazingRace/UpdateTeamPosition',
+                type: "POST",
+                async: false,
+                crossDomain: true,
+                data: {
+                    "eventId": 'E01',
+                    "teamId": 2,
+                    "x": 1.285839,
+                    "y": 103.824365,
+                    "ptStpPass": 1
+                },
+                success: function (data) {
+                    console.log('successful post to server');
+                }
+
+            });
+        });
+
+    });
+    </script>
+}
